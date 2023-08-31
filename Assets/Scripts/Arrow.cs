@@ -21,6 +21,11 @@ public class Arrow : MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             //transform.right = GetComponent<Rigidbody2D>().velocity;
         }
+
+        if (this.transform.position.y <= -20)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 
@@ -54,12 +59,5 @@ public class Arrow : MonoBehaviour
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
         }
-
-        if (other.gameObject.tag == "DestroyZone")
-        {
-            Destroy(this.gameObject);
-        }
-
     }
-
 }

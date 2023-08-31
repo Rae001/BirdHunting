@@ -34,7 +34,7 @@ public class Bird : MonoBehaviour
         if (this.transform.position.x == curvePoint[3].x && this.transform.position.y == curvePoint[3].y)
         {
             Destroy(gameObject);
-            moveTimeMax = Random.Range(5.0f, 10.0f);
+            moveTimeMax = Random.Range(99.0f, 100.0f);
             moveTimeCurrent = 0;
         }
         return;
@@ -79,8 +79,8 @@ public class Bird : MonoBehaviour
         if (other.gameObject.tag == "Arrow")
         {
             enabled = false;
-            this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 3.0f;
-            Debug.Log("ИэСп");
+            this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 5.0f;
+           
         }
 
         if (other.gameObject.tag == "Ground")
