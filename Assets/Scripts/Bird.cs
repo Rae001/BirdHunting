@@ -5,22 +5,24 @@ using UnityEngine;
 public class Bird : MonoBehaviour
 {
 
-    Vector2[] curvePoint = new Vector2[4];
+    Vector2[] curvePoint = new Vector2[4]; // Bird 오브젝트의 이동 지점 4곳을 담을 배열변수 선언
 
-    //float moveSpeed = 10.0f;
-    float moveTimeMax = 0;
-    float moveTimeCurrent = 0;
+    float currentTime = 0;
+    float moveTime = 0;
+
     void Start()
     {
-        
-        //moveSpeed = Random.Range(1.0f, 5.0f);
+        moveTime = Random.Range(1.0f, 10.0f);
     }
 
     void Update()
     {
-        //transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-        moveTimeCurrent += Time.deltaTime;
+        currentTime += Time.deltaTime;
 
+        if (currentTime >= moveTime)
+        {
+            currentTime = moveTime;
+        }
 
         transform.position = new Vector2(
             BezierCurve(curvePoint[0].x, curvePoint[1].x, curvePoint[2].x, curvePoint[3].x),
@@ -29,42 +31,28 @@ public class Bird : MonoBehaviour
         DestroyBird();
     }
 
-    public void DestroyBird()
-    {
-        if (this.transform.position.x == curvePoint[3].x && this.transform.position.y == curvePoint[3].y)
-        {
-            Destroy(gameObject);
-            moveTimeMax = Random.Range(99.0f, 100.0f);
-            moveTimeCurrent = 0;
-        }
-        return;
-    }
-
     public void CurvePointInit(Transform start, Transform end, float DistanceFromStart, float DistanceFromEnd)
     {
 
-        moveTimeMax = Random.Range(3.0f, 6.0f);
 
         curvePoint[0] = start.position;
 
         curvePoint[1] = start.position +
-            (DistanceFromStart * Random.Range(0.0f, 6.0f) * start.right) +
-            (DistanceFromStart * Random.Range(-2.0f, 3.5f) * start.up);
+            (DistanceFromStart * start.right) +
+            (DistanceFromStart * Random.Range(-5.0f, 5.0f) * start.up);
 
         curvePoint[2] = end.position +
-            (DistanceFromEnd * Random.Range(0.0f, 6.0f) * end.right) +
-            (DistanceFromEnd * Random.Range(-2.0f, 3.5f) * end.up);
+            (DistanceFromEnd * end.right) +
+            (DistanceFromEnd * Random.Range(-5.0f, 5.0f) * end.up);
 
         curvePoint[3] = end.position;
     }
 
-
     private float BezierCurve(float a, float b, float c, float d)
     {
-        // 바로 이동하는 문제는 여기서 발생
-        float t = moveTimeCurrent / moveTimeMax;
+        float t = currentTime / moveTime;
 
-        float ab = Mathf.Lerp(a, b, t);
+        float ab = Mathf.Lerp(a, b, t); // t가 변수가 되어 새들의 이동 속도를 조절할 수 있다.
         float bc = Mathf.Lerp(b, c, t);
         float cd = Mathf.Lerp(c, d, t);
 
@@ -74,13 +62,23 @@ public class Bird : MonoBehaviour
         return Mathf.Lerp(abbc, bccd, t);
     }
 
+    public void DestroyBird() // Bird 오브젝트가 마지막 이동지점 위치에 도달할시 파괴하고 생성시간을 랜덤으로 초기화한다.
+    {
+        if (this.transform.position.x == curvePoint[3].x && this.transform.position.y == curvePoint[3].y)
+        {
+            Destroy(gameObject);
+            currentTime = 0;
+            moveTime = Random.Range(0.5f, 5.0f);
+        }
+        return;
+    }
+
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Arrow")
         {
             enabled = false;
             this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 5.0f;
-           
         }
 
         if (other.gameObject.tag == "Ground")
@@ -90,14 +88,5 @@ public class Bird : MonoBehaviour
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
         }
-
-
-        if (other.gameObject.tag == "DestroyZone")
-        {
-            Destroy(gameObject);
-            
-        }
     }
-
-
 }
