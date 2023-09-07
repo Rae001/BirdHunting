@@ -10,8 +10,13 @@ public class Bird : MonoBehaviour
     float currentTime = 0;
     float moveTime = 0;
 
+    [SerializeField] AudioClip[] clip;
+
+    AudioSource birdSound;
+
     void Start()
     {
+        birdSound = GetComponent<AudioSource>();
         moveTime = Random.Range(1.0f, 10.0f);
     }
 
@@ -77,12 +82,19 @@ public class Bird : MonoBehaviour
     {
         if (other.gameObject.tag == "Arrow")
         {
+            birdSound.clip = clip[0];
+            birdSound.Play();
             enabled = false;
             this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 5.0f;
+            // 家府眠啊
+            
         }
 
         if (other.gameObject.tag == "Ground")
         {
+            birdSound.clip = clip[1];
+            birdSound.Play();
+            // 家府眠啊
             this.transform.SetParent(other.transform, true);
 
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());

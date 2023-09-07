@@ -16,6 +16,9 @@ public class ShootArrow : MonoBehaviour
     [SerializeField] TMP_Text angle_Text;
     [SerializeField] LineRenderer drawLine;
 
+    public AudioSource shootSound;
+
+
     Camera _camera = null; // 카메라가 기본좌표지도라고 생각하면 됨
 
 
@@ -91,6 +94,7 @@ public class ShootArrow : MonoBehaviour
             distace_Text_Rect.gameObject.SetActive(false);
             angle_Text_Rect.gameObject.SetActive(false);
             drawLine.gameObject.SetActive(false);
+            shootSound.Play();
         }
     }
 
