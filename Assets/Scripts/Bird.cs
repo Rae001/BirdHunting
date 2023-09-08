@@ -10,7 +10,7 @@ public class Bird : MonoBehaviour
     float currentTime = 0;
     float moveTime = 0;
 
-    [SerializeField] AudioClip[] clip;
+    [SerializeField] AudioClip[] clip; // 
 
     AudioSource birdSound;
 
@@ -86,7 +86,13 @@ public class Bird : MonoBehaviour
             birdSound.Play();
             enabled = false;
             this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 5.0f;
-            // 家府眠啊
+
+   
+            //if (other.gameObject.tag == "Arrow")
+            //{
+            //    birdSound.clip = clip[2];
+            //    birdSound.Play();
+            //}
             
         }
 
@@ -94,7 +100,7 @@ public class Bird : MonoBehaviour
         {
             birdSound.clip = clip[1];
             birdSound.Play();
-            // 家府眠啊
+
             this.transform.SetParent(other.transform, true);
 
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());

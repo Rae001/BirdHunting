@@ -6,7 +6,7 @@ public class Arrow : MonoBehaviour
 {
     Rigidbody2D rb;
     bool hit;
-
+    // 화살이 땅에 박히는소리 추가
 
     void Start()
     {
@@ -19,9 +19,6 @@ public class Arrow : MonoBehaviour
         {
             float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-           
-            Debug.Log(rb.velocity.y);
-            Debug.Log(rb.velocity.x);
         }
 
         if (this.transform.position.y <= -20)
@@ -48,9 +45,11 @@ public class Arrow : MonoBehaviour
             sharedParent.transform.rotation = otherObject.transform.rotation;
             sharedParent.transform.SetParent(otherObject.gameObject.transform);
 
-
-            //other.gameObject.transform.parent = this.gameObject.transform;
             this.gameObject.transform.SetParent(sharedParent.transform, true);
+
+            other.gameObject.tag = "Arrow";
+
+
         }
 
         if (other.gameObject.tag == "Ground")
