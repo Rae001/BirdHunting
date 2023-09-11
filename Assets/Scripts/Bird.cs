@@ -5,12 +5,16 @@ using UnityEngine;
 public class Bird : MonoBehaviour
 {
 
+    [SerializeField] GameObject blood;
+
     Vector2[] curvePoint = new Vector2[4]; // Bird 오브젝트의 이동 지점 4곳을 담을 배열변수 선언
 
     float currentTime = 0;
     float moveTime = 0;
 
-    [SerializeField] AudioClip[] clip; // 
+    bool isDie;
+
+    [SerializeField] AudioClip[] clip;
 
     AudioSource birdSound;
 
@@ -80,20 +84,38 @@ public class Bird : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        GameObject otherObject = other.gameObject;
         if (other.gameObject.tag == "Arrow")
         {
+            Instantiate(blood, transform.position, transform.rotation);
+
+            if (isDie == false)
+            {
+                GameObject sharedParent = new GameObject("Father");
+
+                sharedParent.transform.position = this.transform.position;
+                sharedParent.transform.rotation = this.transform.rotation;
+
+                sharedParent.transform.SetParent(this.transform);
+
+                otherObject.transform.SetParent(sharedParent.transform, true);
+
+                isDie = true;
+            }
+            //else
+            //{
+            //    other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(1, 1) * 4, ForceMode2D.Impulse);
+            //}
+
+            
+
+
+
+
             birdSound.clip = clip[0];
             birdSound.Play();
             enabled = false;
             this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 5.0f;
-
-   
-            //if (other.gameObject.tag == "Arrow")
-            //{
-            //    birdSound.clip = clip[2];
-            //    birdSound.Play();
-            //}
-            
         }
 
         if (other.gameObject.tag == "Ground")

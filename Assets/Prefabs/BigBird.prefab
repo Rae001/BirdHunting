@@ -147,10 +147,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9378ae19f45c97459abe77462229c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blood: {fileID: 2000585877007523812, guid: 80ed03fe0089a024c8f8e40e02ca821d, type: 3}
   clip:
   - {fileID: 8300000, guid: 50f629ffb4fc8a247aafa646ebb071ce, type: 3}
   - {fileID: 8300000, guid: 120e805243a7a8e4794145e8c5da97df, type: 3}
-  - {fileID: 8300000, guid: 332539b23fc150d4891d01a09dc5ee2a, type: 3}
 --- !u!82 &-5770510329430045668
 AudioSource:
   m_ObjectHideFlags: 0
