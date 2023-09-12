@@ -6,15 +6,18 @@ public class Bird : MonoBehaviour
 {
 
     [SerializeField] GameObject blood;
+    [SerializeField] AudioClip[] clip;
+    AudioSource birdSound;
 
     Vector2[] curvePoint = new Vector2[4]; // Bird 오브젝트의 이동 지점 4곳을 담을 배열변수 선언
 
     float currentTime = 0;
     float moveTime = 0;
+    float bloodCount = 5;
 
-    [SerializeField] AudioClip[] clip;
+    
 
-    AudioSource birdSound;
+    
 
     void Start()
     {
@@ -80,12 +83,22 @@ public class Bird : MonoBehaviour
         return;
     }
 
+    public void BloodSplash()
+    {
+        for (int i = 0; i < bloodCount; i++)
+        {
+            Instantiate(blood, transform.position, transform.rotation);
+        }
+        
+    }
+
     void OnCollisionEnter2D(Collision2D other)
     {
         GameObject otherObject = other.gameObject;
         if (other.gameObject.tag == "Arrow")
         {
-            Instantiate(blood, transform.position, transform.rotation);
+
+            BloodSplash();
 
             GameObject sharedParent = new GameObject("Father");
 
@@ -107,10 +120,16 @@ public class Bird : MonoBehaviour
             birdSound.clip = clip[1];
             birdSound.Play();
 
+
             this.transform.SetParent(other.transform, true);
 
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
+
+            Destroy(blood.gameObject.GetComponent<Rigidbody2D>());
+            Destroy(blood.gameObject.GetComponent<PolygonCollider2D>());
+
+
         }
     }
 }
