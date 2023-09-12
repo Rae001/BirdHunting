@@ -12,7 +12,7 @@ public class ShootArrow : MonoBehaviour
     [SerializeField] Transform tfArrow = null; // 화살 위치 정보 변수 선언
     [SerializeField] RectTransform distace_Text_Rect; // 화살 거리 정보를 표현할 텍스트 변수 선언
     [SerializeField] TMP_Text distance_Text;
-    [SerializeField] RectTransform angle_Text_Rect; // 화살 거리 정보를 표현할 텍스트 변수 선언
+    [SerializeField] RectTransform angle_Text_Rect; // 화살 각도 정보를 표현할 텍스트 변수 선언
     [SerializeField] TMP_Text angle_Text;
     [SerializeField] LineRenderer drawLine;
 
@@ -31,6 +31,7 @@ public class ShootArrow : MonoBehaviour
 
     void Start()
     {
+        //endClickPosition = Vector3.MoveTowards(startClickPosition, endClickPosition, 30.0f);
         alreadyArrow.SetActive(false);
         distace_Text_Rect.gameObject.SetActive(false);
         angle_Text_Rect.gameObject.SetActive(false);
@@ -67,21 +68,30 @@ public class ShootArrow : MonoBehaviour
             angle_Text_Rect.gameObject.SetActive(true);
             drawLine.gameObject.SetActive(true); ;
             endClickPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-            drawLine.SetPosition(0, new Vector3(startClickPosition.x, startClickPosition.y, 0f));
-            drawLine.SetPosition(1, new Vector3(endClickPosition.x, endClickPosition.y, 0f));
-        }
 
-        // firstClickPosition - endClickPosition의 거리 계산
-        if (distancePower >= 20.0f)
-            distancePower = 20.0f;
-        else
-            distancePower = 0;
-            distancePower = (startClickPosition - endClickPosition).magnitude;
+            Vector3[] points = new Vector3[2];
+            points[0] = startClickPosition;
+            points[1] = Vector3.MoveTowards(startClickPosition, endClickPosition, 30.0f);
+
+            drawLine.SetPositions(points);
+
+            
+            Vector2 disTextPos = _camera.ScreenToWorldPoint(distace_Text_Rect.transform.position); // 거리정보를 가지는 RectTransform의 스크린값을 월드좌표로 변환하다.
+
+            if (Vector2.Distance(disTextPos, points[1]) > 1) // DrawLine의 1번째 인덱스 벡터 값과 disTextPos의 벡터값 사이의 거리가 1이 넘으면 
+            {
+                distace_Text_Rect.transform.position = _camera.WorldToScreenPoint(points[1]); // DrawLine의 1번째 인덱스 벡터 값을 할당한다.
+            }
+        }
+      
+        distancePower = (startClickPosition - endClickPosition).magnitude;
+        if (distancePower >= 30)
+        {
+            distancePower = 30;
+        }
 
         tfArrow.transform.rotation = Quaternion.Euler(0, 0, GetAngle(startClickPosition, endClickPosition));
         alreadyArrow.transform.rotation = Quaternion.Euler(0, 0, GetAngle(startClickPosition, endClickPosition));
-        //Vector3 angle = new Vector3(0, 0, GetAngle(firstClickPosition, endClickPosition));
-        //Debug.Log("두 좌표 사이의 각도 : " + angle.z);
     }
 
     public void Fire()
@@ -101,7 +111,7 @@ public class ShootArrow : MonoBehaviour
     public void InitCursor()
     {
         angle_Text_Rect.pivot = new Vector2(0.6f, -0.5f);
-        distace_Text_Rect.pivot = new Vector2(0.6f, 0.5f);
+        distace_Text_Rect.pivot = new Vector2(0.6f, 1.0f);
         
         if (distace_Text_Rect.GetComponent<Graphic>())
             distace_Text_Rect.GetComponent<Graphic>().raycastTarget = false;
@@ -114,10 +124,14 @@ public class ShootArrow : MonoBehaviour
     {
         Vector2 anglePos = _camera.WorldToScreenPoint(startClickPosition);
         Vector2 distancePos = _camera.WorldToScreenPoint(endClickPosition);
+
         angle_Text_Rect.position = anglePos;
         distace_Text_Rect.position = distancePos;
 
         distance_Text.text = distancePower.ToString();
+        if (distancePower >= 30.0f)
+            distance_Text.text = "30.0";
+        
         angle_Text.text = tfArrow.transform.rotation.eulerAngles.z.ToString();
 
     }

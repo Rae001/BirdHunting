@@ -12,8 +12,6 @@ public class Bird : MonoBehaviour
     float currentTime = 0;
     float moveTime = 0;
 
-    bool isDie;
-
     [SerializeField] AudioClip[] clip;
 
     AudioSource birdSound;
@@ -89,28 +87,14 @@ public class Bird : MonoBehaviour
         {
             Instantiate(blood, transform.position, transform.rotation);
 
-            if (isDie == false)
-            {
-                GameObject sharedParent = new GameObject("Father");
+            GameObject sharedParent = new GameObject("Father");
 
-                sharedParent.transform.position = this.transform.position;
-                sharedParent.transform.rotation = this.transform.rotation;
+            sharedParent.transform.position = this.transform.position;
+            sharedParent.transform.rotation = this.transform.rotation;
 
-                sharedParent.transform.SetParent(this.transform);
+            sharedParent.transform.SetParent(this.transform);
 
-                otherObject.transform.SetParent(sharedParent.transform, true);
-
-                isDie = true;
-            }
-            //else
-            //{
-            //    other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(1, 1) * 4, ForceMode2D.Impulse);
-            //}
-
-            
-
-
-
+            otherObject.transform.SetParent(sharedParent.transform, true);
 
             birdSound.clip = clip[0];
             birdSound.Play();
