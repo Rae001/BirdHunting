@@ -19,6 +19,7 @@ public class Bird : MonoBehaviour
 
     void Start()
     {
+        
         birdSound = GetComponent<AudioSource>();
         moveTime = Random.Range(1.0f, 10.0f);
     }
@@ -103,8 +104,9 @@ public class Bird : MonoBehaviour
             {
                 BloodSplash();
             }
+
             isDie = true;
-            
+
             birdSound.clip = clip[0];
             birdSound.Play();
             enabled = false;

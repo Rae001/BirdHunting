@@ -44,6 +44,12 @@ public class BirdSpawn : MonoBehaviour
     {
         GameObject bird;
         bird = Instantiate(BirdPrefab[randomNumber], transform.position, transform.rotation);
+
+        if (bird.transform.position.x < 0)
+        {
+            bird.GetComponent<SpriteRenderer>().flipX = true;
+        }
+
         bird.GetComponent<Bird>().CurvePointInit(this.transform, destination.transform, distanceFromStart, distanceFromEnd);
 
         return bird;
