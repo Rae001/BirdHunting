@@ -33,9 +33,19 @@ public class Arrow : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        GameObject otherObject = other.gameObject;
         if (other.gameObject.tag == "Bird")
         {
             isHit = true;
+
+            GameObject sharedParent = new GameObject("Father");
+
+            sharedParent.transform.position = otherObject.transform.position;
+            sharedParent.transform.rotation = otherObject.transform.rotation;
+
+            sharedParent.transform.SetParent(otherObject.transform);
+
+            this.transform.SetParent(sharedParent.transform, true);
 
             rb.velocity = Vector2.zero;
             rb.isKinematic = true;

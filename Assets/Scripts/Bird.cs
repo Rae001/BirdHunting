@@ -14,10 +14,8 @@ public class Bird : MonoBehaviour
     float currentTime = 0;
     float moveTime = 0;
     float bloodCount = 5;
-
-    
-
-    
+    float bloodSpeed = 5;
+    bool isDie;
 
     void Start()
     {
@@ -87,28 +85,26 @@ public class Bird : MonoBehaviour
     {
         for (int i = 0; i < bloodCount; i++)
         {
-            Instantiate(blood, transform.position, transform.rotation);
+            GameObject b = Instantiate(blood, transform.position, transform.rotation);
+            b.transform.localScale = new Vector2(Random.Range(0.3f, 0.9f), Random.Range(0.3f, 0.9f));
+            Rigidbody2D brb = b.GetComponent<Rigidbody2D>();
+            Vector2 dir = transform.rotation * Vector2.up * Random.Range(-0.1f,0.1f);
+            Vector2 pdir = Vector2.Perpendicular(dir) * Random.Range(-30f, 30f);
+            brb.velocity = (dir + pdir) * bloodSpeed;
         }
-        
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        GameObject otherObject = other.gameObject;
+        
         if (other.gameObject.tag == "Arrow")
         {
-
-            BloodSplash();
-
-            GameObject sharedParent = new GameObject("Father");
-
-            sharedParent.transform.position = this.transform.position;
-            sharedParent.transform.rotation = this.transform.rotation;
-
-            sharedParent.transform.SetParent(this.transform);
-
-            otherObject.transform.SetParent(sharedParent.transform, true);
-
+            if(isDie == false)
+            {
+                BloodSplash();
+            }
+            isDie = true;
+            
             birdSound.clip = clip[0];
             birdSound.Play();
             enabled = false;
@@ -120,16 +116,10 @@ public class Bird : MonoBehaviour
             birdSound.clip = clip[1];
             birdSound.Play();
 
-
             this.transform.SetParent(other.transform, true);
 
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
-
-            Destroy(blood.gameObject.GetComponent<Rigidbody2D>());
-            Destroy(blood.gameObject.GetComponent<PolygonCollider2D>());
-
-
         }
     }
 }
