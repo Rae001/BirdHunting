@@ -9,6 +9,7 @@ public class Bird : MonoBehaviour
     [SerializeField] AudioClip[] clip;
     AudioSource birdSound;
 
+
     Vector2[] curvePoint = new Vector2[4]; // Bird 오브젝트의 이동 지점 4곳을 담을 배열변수 선언
 
     float currentTime = 0;
@@ -19,7 +20,6 @@ public class Bird : MonoBehaviour
 
     void Start()
     {
-        
         birdSound = GetComponent<AudioSource>();
         moveTime = Random.Range(1.0f, 10.0f);
     }
@@ -97,10 +97,20 @@ public class Bird : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        
+        GameObject otherObject = other.gameObject;
         if (other.gameObject.tag == "Arrow")
         {
-            if(isDie == false)
+
+            GameObject sharedParent = new GameObject("Father");
+
+            sharedParent.transform.position = this.gameObject.transform.position;
+            sharedParent.transform.rotation = this.gameObject.transform.rotation;
+
+            sharedParent.transform.SetParent(this.gameObject.transform);
+
+            otherObject.transform.SetParent(this.gameObject.transform, true);
+
+            if (isDie == false)
             {
                 BloodSplash();
             }
@@ -111,6 +121,7 @@ public class Bird : MonoBehaviour
             birdSound.Play();
             enabled = false;
             this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 5.0f;
+            this.gameObject.tag = "Arrow";
         }
 
         if (other.gameObject.tag == "Ground")
@@ -122,6 +133,7 @@ public class Bird : MonoBehaviour
 
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
+            Destroy(this.gameObject.GetComponent<AudioSource>());
         }
     }
 }

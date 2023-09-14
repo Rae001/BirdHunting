@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
     AudioSource arrowSound;
 
     Rigidbody2D rb;
-    bool isHit;
+    bool isHit = false;
 
     void Start()
     {
@@ -18,11 +18,13 @@ public class Arrow : MonoBehaviour
 
     void Update()
     {
+        
         if (isHit == false)
         {
             float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
+        
 
         if (this.transform.position.y <= -20)
         {
@@ -33,40 +35,52 @@ public class Arrow : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        GameObject otherObject = other.gameObject;
+        //GameObject otherObject = other.gameObject;
         if (other.gameObject.tag == "Bird")
         {
             isHit = true;
+            //GameObject sharedParent = new GameObject("Father");
 
-            GameObject sharedParent = new GameObject("Father");
+            //sharedParent.transform.position = otherObject.transform.position;
+            //sharedParent.transform.rotation = otherObject.transform.rotation;
 
-            sharedParent.transform.position = otherObject.transform.position;
-            sharedParent.transform.rotation = otherObject.transform.rotation;
+            //sharedParent.transform.SetParent(otherObject.transform);
 
-            sharedParent.transform.SetParent(otherObject.transform);
+            //this.transform.SetParent(sharedParent.transform, true);
 
-            this.transform.SetParent(sharedParent.transform, true);
+            //rb.velocity = Vector2.zero;
+            //.isKinematic = true;
 
-            rb.velocity = Vector2.zero;
-            rb.isKinematic = true;
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
         }
 
         if (other.gameObject.tag == "Ground")
         {
+            isHit = true;
             arrowSound.clip = clip[0];
             arrowSound.Play();
 
-            isHit = true;
-            rb.velocity = Vector2.zero;
-            rb.isKinematic = true;
+            
+            //rb.velocity = Vector2.zero;
+            //rb.isKinematic = true;
             Destroy(this.gameObject.GetComponent<Rigidbody2D>());
             Destroy(this.gameObject.GetComponent<BoxCollider2D>());
+            Destroy(this.gameObject.GetComponent<AudioSource>());
         }
 
         if (other.gameObject.tag == "Arrow")
         {
+            int vec = Random.Range(0, 2);
+            if (vec==0)
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.left * 15.0f;
+            }
+            else
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.right * 15.0f;
+            }
+            
             arrowSound.clip = clip[1];
             arrowSound.Play();
         }

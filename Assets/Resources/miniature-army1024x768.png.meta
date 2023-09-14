@@ -3748,15 +3748,16 @@ TextureImporter:
       peasant-back-arm-yellow: 21300176
       priest-body-red: 21300154
       merchant-back-arm-black: 21300244
+      chain-hood: 21300268
       priest-front-arm2-red: 21300020
       thief-body-green: 21300118
       priest-front-arm1-white: 21300202
       priest-front-arm2-green: 21300106
-      thief-body-black: 21300126
       priest-front-arm2-yellow: 21300186
-      spear: 21300134
+      thief-body-black: 21300126
       merchant-front-arm2-blue: 21300070
       priest-back-arm-white: 21300200
+      spear: 21300134
       merchant-back-arm-white: 21300206
       soldier-body-red: 21300072
       thief-body-blue: 21300116
@@ -3765,7 +3766,6 @@ TextureImporter:
       merchant-back-arm-yellow: 21300188
       hood: 21300270
       merchant-body-black: 21300262
-      chain-hood: 21300268
       priest-front-arm2-orange: 21300146
       head-light-pink: 21300088
       priest-front-arm1-black: 21300240
@@ -3803,10 +3803,10 @@ TextureImporter:
       mace: 21300168
       priest-back-arm-red: 21300016
       peasant-leg2: 21300052
-      arrow: 21300128
       peasant-front-arm1-orange: 21300138
       soldier-front-arm1: 21300006
       peasant-body-red: 21300212
+      arrow: 21300128
       merchant-body-blue: 21300252
       rod: 21300170
       knight-leg2: 21300048
